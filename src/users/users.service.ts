@@ -47,14 +47,23 @@ export class UsersService {
 
     const payload = {
       email: existingUser.email,
-      uid: existingUser._id,
+      _id: existingUser._id,
     };
 
-    const generatedToken = this.jwtservice.sign(payload);
+    console.log("existing: ",payload);
+
+
+    const generatedToken = this.jwtservice.sign(payload, { secret: process.env.JWT_SECRET });
+
 
     return {
       payload: payload,
       access_token: generatedToken,
     };
+  }
+
+  async getAllUsers() {
+    const user = await this.userModel.find().exec();
+    return user;
   }
 }
